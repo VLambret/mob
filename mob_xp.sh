@@ -1,5 +1,16 @@
 #! /bin/bash
 
+function notify_new_session()
+{
+	MEMBER=$1
+	echo $MEMBER
+}
+
+function wait_until_period_end()
+{
+	PERIOD=$1
+	sleep $PERIOD
+}
 
 if [ "$#" -lt "3" ]
 then
@@ -13,7 +24,7 @@ shift
 
 for I in $@ ;
 do
-	echo $I
-	sleep $DELAY
+	notify_new_session $I
+	wait_until_period_end $DELAY
 done
 
