@@ -10,6 +10,7 @@ function wait_until_period_end()
 {
 	PERIOD=$1
 	sleep $PERIOD
+	mplayer beep.mp3 > /dev/null 2>&1 &
 }
 
 if [ "$#" -lt "3" ]
