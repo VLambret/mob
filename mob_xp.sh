@@ -3,6 +3,8 @@
 function notify_new_session()
 {
 	MEMBER=$1
+
+	clear
 	echo $MEMBER
 }
 
@@ -22,10 +24,14 @@ fi
 DELAY=$1
 
 shift
+clear
 
-for I in $@ ;
+while true;
 do
-	notify_new_session $I
-	wait_until_period_end $DELAY
+	for I in $@ ;
+	do
+		notify_new_session $I
+		wait_until_period_end $DELAY
+	done
 done
 
