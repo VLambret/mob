@@ -1,6 +1,20 @@
 #! /bin/bash
 
+DELAY=$1
+shift
+TEAM_SIZE=$#
 SESSION_COUNTER=0
+
+function set_color()
+{
+	COLOR_NUMBER=$(($SESSION_COUNTER % $TEAM_SIZE % 7 + 1))
+	tput setaf $COLOR_NUMBER
+}
+
+function reset_color()
+{
+	tput sgr0
+}
 
 function print_centered()
 {
@@ -19,7 +33,9 @@ function print_centered()
 		echo -n ' '
 	done
 
-	echo $TEXT
+	set_color
+	echo $TEXT $COLOR
+	reset_color
 }
 
 function notify_new_session()
@@ -37,15 +53,13 @@ function wait_until_period_end()
 	mplayer beep.mp3 > /dev/null 2>&1 &
 }
 
-if [ "$#" -lt "3" ]
+if [ "$TEAM_SIZE" -lt "2" ]
 then
 	echo "You should be at least two for mob programming"
 	exit
 fi
 
-DELAY=$1
 
-shift
 clear
 
 while true;
