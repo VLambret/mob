@@ -5,6 +5,19 @@ shift
 TEAM_SIZE=$#
 SESSION_COUNTER=0
 
+function print_line_centered()
+{
+	TEXT="$1"
+	COLS=$(tput cols)
+
+	for HORIZONTAL_PADDING in $(seq 1 $(( ($COLS - ${#TEXT}) / 2 )) );
+	do
+		echo -n ' '
+	done
+
+	echo "$TEXT"
+}
+
 function set_color()
 {
 	COLOR_NUMBER=$(($SESSION_COUNTER % $TEAM_SIZE % 7 + 1))
@@ -16,25 +29,37 @@ function reset_color()
 	tput sgr0
 }
 
+function print_break_message()
+{
+	BREAK_MSG="  TIME FOR A BREAK MAYBE ?  "
+	echo
+	for HORIZONTAL_PADDING in $(seq 1 $(( ($COLS - ${#BREAK_MSG}) / 2 )) );
+	do
+		echo -n ' '
+	done
+	tput setaf 7
+	tput setab 1
+	echo "$BREAK_MSG"
+	reset_color
+}
+
 function print_centered()
 {
 	clear
-	TEXT=$1
+	TEXT=$*
 
-	COLS=$(tput cols)
 	LINES=$(tput lines)
 	for LINE_SKIP in $(seq 1 $(( $LINES / 2 )) );
 	do
 		echo
 	done
 
-	for HORIZONTAL_PADDING in $(seq 1 $(( ($COLS - ${#TEXT}) / 2 )) );
-	do
-		echo -n ' '
-	done
-
 	set_color
-	echo $TEXT $COLOR
+	print_line_centered "$TEXT"
+	if [ "$SESSION_COUNTER" -gt "9" ]
+	then
+		print_break_message
+	fi
 	reset_color
 }
 
@@ -58,7 +83,6 @@ then
 	echo "You should be at least two for mob programming"
 	exit
 fi
-
 
 clear
 
