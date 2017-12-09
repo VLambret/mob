@@ -1,11 +1,14 @@
 #! /bin/bash
 
+SESSION_COUNTER=0
+
 function notify_new_session()
 {
 	MEMBER=$1
 
 	clear
-	echo $MEMBER
+	SESSION_COUNTER=$(( $SESSION_COUNTER + 1))
+	echo "$SESSION_COUNTER $MEMBER"
 }
 
 function wait_until_period_end()
