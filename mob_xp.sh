@@ -2,13 +2,32 @@
 
 SESSION_COUNTER=0
 
+function print_centered()
+{
+	clear
+	TEXT=$1
+
+	COLS=$(tput cols)
+	LINES=$(tput lines)
+	for LINE_SKIP in $(seq 1 $(( $LINES / 2 )) );
+	do
+		echo
+	done
+
+	for HORIZONTAL_PADDING in $(seq 1 $(( ($COLS - ${#TEXT}) / 2 )) );
+	do
+		echo -n ' '
+	done
+
+	echo $TEXT
+}
+
 function notify_new_session()
 {
 	MEMBER=$1
 
-	clear
 	SESSION_COUNTER=$(( $SESSION_COUNTER + 1))
-	echo "$SESSION_COUNTER $MEMBER"
+	print_centered "$SESSION_COUNTER $MEMBER"
 }
 
 function wait_until_period_end()

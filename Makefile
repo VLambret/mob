@@ -1,2 +1,2 @@
 all:
-	./mob_xp.sh 5m Victor Corentin JP 
+	./mob_xp.sh 4s Victor Corentin JP 
