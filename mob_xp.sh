@@ -1,9 +1,10 @@
 #! /bin/bash
 
-DELAY=$1
-shift
+DELAY=5m
+SWITCH_LIMIT=0
+SWITCH_COUNTER=0
+
 TEAM_SIZE=$#
-SESSION_COUNTER=0
 
 function print_line_centered()
 {
@@ -20,7 +21,7 @@ function print_line_centered()
 
 function set_color()
 {
-	COLOR_NUMBER=$(($SESSION_COUNTER % $TEAM_SIZE % 7 + 1))
+	COLOR_NUMBER=$(($SWITCH_COUNTER % $TEAM_SIZE % 7 + 1))
 	tput setaf $COLOR_NUMBER
 }
 
@@ -56,7 +57,7 @@ function print_centered()
 
 	set_color
 	print_line_centered "$TEXT"
-	if [ "$SESSION_COUNTER" -gt "9" ]
+	if [ "$SWITCH_COUNTER" -gt "9" ]
 	then
 		print_break_message
 	fi
@@ -67,8 +68,8 @@ function notify_new_session()
 {
 	MEMBER=$1
 
-	SESSION_COUNTER=$(( $SESSION_COUNTER + 1))
-	print_centered "$SESSION_COUNTER $MEMBER"
+	SWITCH_COUNTER=$(( $SWITCH_COUNTER + 1))
+	print_centered "$SWITCH_COUNTER $MEMBER"
 }
 
 function wait_until_period_end()
@@ -77,6 +78,17 @@ function wait_until_period_end()
 	sleep $PERIOD
 	mplayer beep.mp3 > /dev/null 2>&1 &
 }
+
+DELAY_PATTERN='^([0-9]+x)?[0-9]+[sm]$'
+DELAY_DETECTOR=$(echo $1 | grep -E $DELAY_PATTERN)
+
+if [ ! "$DELAY_DETECTOR" = "" ];
+then
+	DELAY=$(echo $DELAY_DETECTOR | sed -E "s/[0-9]+x//")
+	PARSE_LIMIT=$(echo $DELAY_DETECTOR | sed -E "s/x?${DELAY}//")
+	SWITCH_LIMIT=${PARSE_LIMIT:-$SWITCH_LIMIT}
+	shift
+fi
 
 if [ "$TEAM_SIZE" -lt "2" ]
 then
