@@ -2,7 +2,7 @@
 
 DELAY=5m
 SWITCH_LIMIT=0
-SWITCH_COUNTER=0
+SWITCH_COUNTER=1
 
 TEAM_SIZE=$#
 
@@ -56,9 +56,11 @@ function print_centered()
 
 	set_color
 	print_line_centered "$TEXT"
-	if [ "$SWITCH_COUNTER" -gt "9" ]
+	if [ "$SWITCH_COUNTER" -gt "$SWITCH_LIMIT" -a "$SWITCH_LIMIT" -ne "0" ]
 	then
 		print_break_message
+	else
+		SWITCH_COUNTER=$(( $SWITCH_COUNTER + 1))
 	fi
 	reset_color
 }
@@ -67,9 +69,8 @@ function notify_new_session()
 {
 	MEMBER=$1
 
-	SWITCH_COUNTER=$(( $SWITCH_COUNTER + 1))
 	clear
-	print_centered "$SWITCH_COUNTER $MEMBER"
+	print_centered "$MEMBER"
 }
 
 function wait_until_period_end()
