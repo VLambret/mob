@@ -4,8 +4,6 @@ DELAY=5m
 SWITCH_LIMIT=0
 SWITCH_COUNTER=1
 
-TEAM_SIZE=$#
-
 function print_line_centered()
 {
 	TEXT="$1"
@@ -90,6 +88,8 @@ then
 	SWITCH_LIMIT=${PARSE_LIMIT:-$SWITCH_LIMIT}
 	shift
 fi
+
+TEAM_SIZE=$#
 
 if [ "$TEAM_SIZE" -lt "2" ]
 then
