@@ -46,7 +46,6 @@ function print_break_message()
 
 function print_centered()
 {
-	clear
 	TEXT=$*
 
 	LINES=$(tput lines)
@@ -69,6 +68,7 @@ function notify_new_session()
 	MEMBER=$1
 
 	SWITCH_COUNTER=$(( $SWITCH_COUNTER + 1))
+	clear
 	print_centered "$SWITCH_COUNTER $MEMBER"
 }
 
@@ -95,8 +95,6 @@ then
 	echo "You should be at least two for mob programming"
 	exit
 fi
-
-clear
 
 while true;
 do
