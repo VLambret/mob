@@ -4,6 +4,16 @@ DELAY=5m
 SWITCH_LIMIT=0
 SWITCH_COUNTER=1
 
+function print_usage()
+{
+echo "usage : $0 name1 name2 [name 3 ... ]"
+echo "        $0 [delay] name1 name2 [name 3 ... ]"
+echo "        $0 [(switch)x(delay)] name1 name2 [name 3 ... ]"
+echo
+echo "        delay : delay in minutes or seconds. ex: 120s, 5m"
+echo "        switch : Number of total member switch before a break message is printed"
+}
+
 function print_line_centered()
 {
 	TEXT="$1"
@@ -78,6 +88,12 @@ function wait_until_period_end()
 	mplayer beep.mp3 > /dev/null 2>&1 &
 }
 
+if [ "$1" = "help" -o "$1" = "-h" -o "$1" = "--help" -o "$1" = "-help" ]
+then
+	print_usage
+	exit
+fi
+
 DELAY_PATTERN='^([0-9]+x)?[0-9]+[sm]$'
 DELAY_DETECTOR=$(echo $1 | grep -E $DELAY_PATTERN)
 
@@ -94,6 +110,7 @@ TEAM_SIZE=$#
 if [ "$TEAM_SIZE" -lt "2" ]
 then
 	echo "You should be at least two for mob programming"
+	print_usage
 	exit
 fi
 
